@@ -2,6 +2,7 @@ import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { join } from 'path'; 
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
+    autoLoadEntities: true,
     type: 'postgres',
     host: 'localhost',
     port: 5432,
