@@ -13,8 +13,23 @@ export class TasksService {
     @InjectRepository(Task)
     private taskRepository: Repository<Task>,
   ) {}
-  // constructor(@InjectRepository(Task) tasksRepo: Repository<Task>){}
-  //   private tasks: Task[] = [] ;
+
+
+  async getTasks(filterDto: GetTasksFilterDto): Promise<Task[]> {
+    const { status, search } = filterDto;
+    const query = this.taskRepository.createQueryBuilder('task');
+
+    if(status) {
+      query.andWhere('task.status = :status' ,{ status });
+    }
+    
+    if (search) {
+      query.andWhere('(task.title LIKE :search OR task.description LIKE :search)', { search: `%${search}%` });
+    }
+
+    const tasks = await query.getMany()
+    return tasks;
+  }
 
   //   getAllTasks(): Task[] {
   //       return this.tasks;
